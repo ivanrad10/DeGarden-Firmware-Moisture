@@ -1,0 +1,17 @@
+# flashing for esp
+[target.riscv32imc-unknown-none-elf]
+runner = "espflash flash --monitor"
+
+[build]
+rustflags = [
+  # flags for esp32 linker
+  "-C", "link-arg=-Tlinkall.x",
+  "-C", "link-arg=-Trom_functions.x",
+  # flag for esp-backtrace
+  "-C", "force-frame-pointers",
+]
+target = "riscv32imc-unknown-none-elf"
+
+# neeede for [#no_std]
+[unstable]
+build-std = ["core"]

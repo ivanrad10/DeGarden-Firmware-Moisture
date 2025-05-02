@@ -43,8 +43,5 @@ pub fn send(
 
     network::post_req("/moisture", &mut socket, msg);
 
-    const SLEEP_DURATION: &str = env!("SLEEP_DURATION");
-    let sleep_duration: u16 = SLEEP_DURATION.parse::<u16>().unwrap();
-
-    delay.delay_millis(sleep_duration as u32);
+    delay.delay_millis(5000 as u32);
 }

@@ -7,8 +7,6 @@ use smoltcp::wire::{IpAddress, Ipv4Address};
 // Dev only
 use esp_println::println;
 
-use crate::board;
-
 // Execute post request
 pub fn post_req(endpoint: &str, socket: &mut Socket<WifiStaDevice>, msg: &str) {
     let ip_address = get_ip();
@@ -76,25 +74,16 @@ fn send_req(socket: &mut Socket<WifiStaDevice>, ip_address: IpAddress, request: 
 
 // Read HTTP response from server
 fn read_res(socket: &mut Socket<WifiStaDevice>) {
-    let start = board::timer::get_current_time();
     loop {
-        println!("A");
         let mut buffer = [0u8; 512];
         if let Ok(len) = socket.read(&mut buffer) {
-            println!("B");
             let to_print = core::str::from_utf8(&buffer[..len]).unwrap();
             println!("{}", to_print);
         } else {
-            println!("C");
             break;
         }
 
-        let now = board::timer::get_current_time();
-        println!("{}", now - start);
-        if now - start > 5000 {
-            println!("Server not responding");
-            break;
-        }
+        // todo interrupt for timeout
     }
 
     socket.disconnect();

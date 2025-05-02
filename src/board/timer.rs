@@ -15,16 +15,16 @@ pub fn init_rtc(lpwr: LPWR) {
     });
 }
 
-// Return current timestamp
-pub fn get_current_time() -> u64 {
-    critical_section::with(|cs| {
-        RTC_INSTANCE
-            .borrow_ref_mut(cs)
-            .as_mut()
-            .map(|rtc| rtc.get_time_ms())
-            .unwrap_or(0)
-    })
-}
+// // Return current timestamp
+// pub fn get_current_time() -> u64 {
+//     critical_section::with(|cs| {
+//         RTC_INSTANCE
+//             .borrow_ref_mut(cs)
+//             .as_mut()
+//             .map(|rtc| rtc.get_time_ms())
+//             .unwrap_or(0)
+//     })
+// }
 
 // Allow access to timer
 pub fn with_rtc<F: FnOnce(&mut Rtc)>(f: F) {

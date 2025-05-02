@@ -8,15 +8,15 @@ firmware/
 ├── .cargo/  
 │   └── config.toml # Custom options for cargo builds (target, runner, etc.)  
 ├── src/  
-│   ├── communication/ # Handles Wi-Fi  
-│   │   ├── mod.rs  
-│   │   ├── network.rs  
-│   │   └── wifi.rs  
 │   ├── board/ # Sensor and timing logic  
 │   │   ├── mod.rs  
 │   │   ├── sensor.rs  
 │   │   └── timer.rs  
-│   ├── power/ # Sleep and wakeup logic  
+│   ├── comms/ # Handles Wi-Fi  
+│   │   ├── mod.rs  
+│   │   ├── network.rs  
+│   │   └── wifi.rs  
+│   ├── power/ # Sleep logic  
 │   │   ├── mod.rs  
 │   │   └── sleep.rs  
 │   ├── util/ # Utilities  
@@ -31,10 +31,11 @@ firmware/
 
 ## Highlights
 
-- **Low Power**: Enters light sleep and wakes on GPIO interrupt from a flow sensor.
-- **Accurate Measurement**: Timestamped event counting using RTC.
+- **Low Power**: Enters deep sleep and wakes at predefined time intervals.
+- **Accurate Measurement**: Utilizes the ADC (Analog-to-Digital Converter) to capture precise raw readings from the moisture sensor.
 - **Modular Design**: Separate modules for communication, measurement, power, and utilities.
 - **Rust Embedded**: Uses `no_std`, `esp-hal`, and `esp-backtrace` for bare-metal reliability.
 
 ## Usage
-Flash firmware with `cargo run`.
+Build project with `DEVICE_ID="****" cargo build --release`, and run it with `espflash flash target/riscv32imc-unknown-none-elf/release/firmware --monitor`.
+This way you can build this firmware on server, and flash it locally on end-user machine with `espflash flash firmware --monitor`.

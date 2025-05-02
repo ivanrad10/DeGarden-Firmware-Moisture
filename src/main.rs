@@ -42,6 +42,8 @@ fn main() -> ! {
     let msg = util::message::make_msg(value);
 
     // Send data package
+    board::timer::init_rtc(lpwr);
+
     comms::send(
         &mut timg0,
         &mut rng,
@@ -54,5 +56,5 @@ fn main() -> ! {
 
     // Go to sleep
     println!("Good Night!");
-    power::sleep::enter(lpwr);
+    power::sleep::enter();
 }

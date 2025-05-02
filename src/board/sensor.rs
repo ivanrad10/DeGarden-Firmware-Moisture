@@ -1,17 +1,19 @@
-use critical_section::Mutex;
-use core::cell::RefCell;
-
-static ISR_COUNT: Mutex<RefCell<u64>> = Mutex::new(RefCell::new(0));
-const FLOW_RESOLUTION: f64 = 2.25;
-
-// Increment sensor register
-pub fn increment() {
-    critical_section::with(|cs| {
-        *ISR_COUNT.borrow_ref_mut(cs) += 1;
-    });
-}
+use esp_hal::{
+    analog::adc::{Adc, AdcConfig},
+    gpio::Io,
+    peripherals::ADC1,
+    prelude::nb,
+};
 
 // Return current sensor reading
-pub fn get_measurement() -> f64 {
-    critical_section::with(|cs| *ISR_COUNT.borrow_ref(cs) as f64) * FLOW_RESOLUTION / 1000.0
+pub fn get_measurement(io: Io, adc1: ADC1) -> f64 {
+    let analog_pin = io.pins.gpio2;
+    let mut adc1_config = AdcConfig::new();
+    let mut pin = adc1_config.enable_pin(
+        analog_pin,
+        esp_hal::analog::adc::Attenuation::Attenuation11dB,
+    );
+    let mut adc1 = Adc::new(adc1, adc1_config);
+    let pin_value: u16 = nb::block!(adc1.read_oneshot(&mut pin)).unwrap();
+    return pin_value as f64;
 }

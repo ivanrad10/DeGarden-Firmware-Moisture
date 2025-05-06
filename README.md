@@ -37,5 +37,5 @@ firmware/
 - **Rust Embedded**: Uses `no_std`, `esp-hal`, and `esp-backtrace` for bare-metal reliability.
 
 ## Usage
-Build project with `DEVICE_ID="****" cargo build --release`, and run it with `espflash flash target/riscv32imc-unknown-none-elf/release/firmware --monitor`.
+Build project with `SSID="****" PASSWORD="****" DEVICE_ID="****" cargo build --release`, and run it with `espflash flash target/riscv32imc-unknown-none-elf/release/firmware --monitor`.
 This way you can build this firmware on server, and flash it locally on end-user machine with `espflash flash firmware --monitor`.
